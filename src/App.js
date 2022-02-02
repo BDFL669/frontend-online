@@ -1,24 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// Routing
+import PrivateRoute from "./components/routing/PrivateRoute";
 
-function App() {
+// Screens
+import PrivateScreen from "./components/screens/PrivateScreen";
+import LoginScreen from "./components/screens/LoginScreen";
+import RegisterScreen from "./components/screens/RegisterScreen";
+import ForgotPasswordScreen from "./components/screens/ForgotPasswordScreen";
+import ResetPasswordScreen from "./components/screens/ResetPasswordScreen";
+
+// Components
+import Navbar from "./components/Navbar";
+import SideDrawer from "./components/SideDrawer";
+import Backdrop from "./components/Backdrop";
+
+// more Screens
+import HomeScreen from "./screens/HomeScreen";
+import ProductScreen from "./screens/ProductScreen";
+import CartScreen from "./screens/CartScreen";
+
+//const { spawn } = require('child_process');
+//const child = spawn('dir', [], {shell: true});
+
+const App = () => {
+  const [sideToggle, setSideToggle] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar click={() => setSideToggle(true)} />
+      <SideDrawer show={sideToggle} click={() => setSideToggle(false)} />
+      <Backdrop show={sideToggle} click={() => setSideToggle(false)} />
+      <main className="app">
+        <Switch>
+          <Route exact path="/" component={HomeScreen} />
+          <Route exact path="/product/:id" component={ProductScreen} />
+          <Route exact path="/cart" component={CartScreen} />
+          <PrivateRoute exact path="/private" component={PrivateScreen} />
+          <Route exact path="/login" component={LoginScreen} />
+          <Route exact path="/register" component={RegisterScreen} />
+          <Route
+            exact
+            path="/forgotpassword"
+            component={ForgotPasswordScreen}
+          />
+          <Route
+            exact
+            path="/passwordreset/:resetToken"
+            component={ResetPasswordScreen}
+          />
+        </Switch>
+      </main>
+    </Router>
   );
 }
 
